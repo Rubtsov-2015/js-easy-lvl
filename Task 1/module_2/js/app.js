@@ -7,9 +7,9 @@ textareaCounter.addEventListener('keyup', function(e) {
 
 
 
-textareaCounter.addEventListener('keydown', ban_sybmols, false);
+textareaCounter.addEventListener('keydown', ban_symbols, false);
 
-function ban_sybmols(evt){
+function ban_symbols(evt){
 	var totalCount = textareaCounter.value.length;
 	if(totalCount > 139){
 		if(!(evt.keyCode == 8 || evt.keyCode == 45 || evt.keyCode == 46 || (evt.keyCode > 36 && evt.keyCode < 41))){
