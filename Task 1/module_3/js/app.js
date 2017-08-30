@@ -1,6 +1,11 @@
 /**
 * TextCounter
 */
+
+
+
+
+
 var TextCounter = {
 	maxChar: 140,
 	textArea: null,
@@ -13,22 +18,20 @@ var TextCounter = {
 		this.events();
 	},
 	events: function() {
-		console.log(this.textArea);
-		this.textArea.addEventListener('keydown', ban_symbols(event, this.textArea, this.maxChar), false);
+		var _thisTextCounter = this;
+		this.textArea.addEventListener('keydown', function(){
+			var totalCount = this.value.length;
+			_thisTextCounter.textAreaTotal.innerHTML = totalCount;
+			_thisTextCounter.textAreaLeft.innerHTML = _thisTextCounter.maxChar - totalCount;
+			if(totalCount >= _thisTextCounter.maxChar){
+				if(!(event.keyCode == 8 || event.keyCode == 45 || event.keyCode == 46 || (event.keyCode > 36 && event.keyCode < 41))){
+					event.preventDefault();
+				}
+			}
+		}, false);
 	},
 
 };
 
-
-function ban_symbols(e, textareaCounter, maxChar){
-	var totalCount = textareaCounter.value.length;
-	console.log(totalCount);
-	if(totalCount >= maxChar){
-		if(!(e.keyCode == 8 || e.keyCode == 45 || e.keyCode == 46 || (e.keyCode > 36 && e.keyCode < 41))){
-			e.preventDefault();
-		}
-	}
-	return false;
-}
 
 TextCounter.init();
