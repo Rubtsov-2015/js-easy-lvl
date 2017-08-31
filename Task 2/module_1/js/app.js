@@ -10,47 +10,49 @@ var Loader = (function() {
                 document.getElementById('loaderPercent');
             this.images = document.getElementsByTagName('img');
             /* add additional properties below if needed */
-            this.events();
             this.loadComplete = 0;
+            this.stagesPassed = 0;
+            this.errorsDownloadImg = 0;
+            this.events();
         },
         events: function() {
             var imgArr = [];
-            // console.log(imgArr);
             for(var i = 0; i < this.images.length; i++){
             	imgArr[i] = new Image();
             	imgArr[i].src = this.images[i].src;
-            	this.loadImage(imgArr[i])
-            	// console.log(imgArr[i].src);
+            	this.loadImage(imgArr[i]);
+            	
             }
-
-            // this.images.onload = function() { console.log("Успех")};
-
-			// img.src = "https://farm2.staticflickr.com/1580/25180703901_8d151b1260_b.jpg";
-			
         },
         loadImage: function(img) {
             // call this function on image load or error event
+            var self = this;
             img.onload = function () {
-            	console.log(this.increaseProgressBar);
-			   // this.increaseProgressBar(true);
-			   this.loadComplete++;
-			   // console.log(this.loadComplete);
+			   self.stagesPassed++;
+			   self.loadComplete++;
+				console.log(self.errorsDownloadImg);
+			   self.increaseProgressBar(self, true);
+			   if(self.stagesPassed == self.images.length ? self.loadedCallback(self) : false);
 			}
 			img.onerror = function () {
-			   console.log('error');
-			   // this.increaseProgressBar(false);
+			   self.stagesPassed++;
+			   self.errorsDownloadImg++;
+			   self.increaseProgressBar(self, false);
+			   if(self.stagesPassed == self.images.length ? self.loadedCallback(self) : false);
 			}
         },
-        increaseProgressBar: function(callBackImg) {
-            // use this method to increase progress bar percentage and
-            //color filling
-           	if(callBackImg)
-           		this.loaderPercent.innerHTML(this.loadComplete/this.images.length);
+        increaseProgressBar: function(self, callBackImg) {
+            // use this method to increase progress bar percentage and color filling
 
+       		self.loaderPercent.innerHTML = self.progressBar.style.width = parseInt(self.loadComplete/self.images.length * 100) + '%';
+           	self.loaderPercent.innerHTML = parseInt(self.loadComplete/self.images.length * 100) + '%';
         },
-        loadedCallback: function() {
-            // call this function once images will be loaded. Put code
-            //inside this method which will hide progress bar.
+        loadedCallback: function(self) {
+			console.log(self.errorsDownloadImg);
+			setTimeout(function(){
+        		alert('all images have been downloaded. With errors: ' + self.errorsDownloadImg);
+        		self.loader.style.display = 'none';
+			}, 500);
         }
     };
 })();
